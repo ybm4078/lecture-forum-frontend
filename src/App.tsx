@@ -6,12 +6,10 @@ import GetRouter from "./Router/GetRouter.tsx";
 
 function App() {
   return (
-
-          <ThemeProvider theme={lightTheme}>
-              <GlobalStyle />
-              <RouterProvider router={GetRouter} />
-          </ThemeProvider>
-
+      <ThemeProvider theme={lightTheme}>
+          <GlobalStyle />
+          <RouterProvider router={GetRouter} />
+      </ThemeProvider>
   );
 }
 export default App;
