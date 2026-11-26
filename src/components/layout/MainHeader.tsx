@@ -36,13 +36,6 @@ const NavGroup = styled.nav`
     gap: 16px;
 `;
 
-const Icon = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-`;
-
 function MainHeader() {
     return (
         <HeaderContainer>
@@ -56,7 +49,7 @@ function MainHeader() {
                         color={"secondary"}
                         variant={"icon"}
                         onClick={() => console.log("테마변경")}>
-                        <Icon><IoMoon/></Icon>
+                        <IoMoon/>
                     </Button>
                     <Button as={Link} to={"/auth/signin"} color={"secondary"} variant={"text"}>
                         로그인
