@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import InputGroup from "../../../components/common/input/InputGroup.tsx";
+import { useForm } from "react-hook-form";
 
 const AuthContainer = styled.div`
     display: flex;
@@ -31,13 +32,25 @@ const AuthSubTitle = styled.h6`
     margin-bottom: 32px;
 `;
 
+type SignUpInput = {
+    username: string;
+    password: string;
+    nickname: string;
+};
+
 function SignUpPage() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignUpInput>();
+
     return (
         <AuthContainer>
             <AuthFormCard>
                 <AuthTitle>회원가입</AuthTitle>
                 <AuthSubTitle>토론대난투에 오신 것을 환영합니다!</AuthSubTitle>
-                <InputGroup label={"아이디"} />
+                <InputGroup label={"아이디"} registerObj={register("username")} />
                 <InputGroup label={"비밀번호"} errorMessage={"에러메세지222"} type={"password"} />
             </AuthFormCard>
         </AuthContainer>
