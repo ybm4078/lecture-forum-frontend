@@ -9,6 +9,7 @@ import { ThemeContext } from "../../context/theme/ThemeContext.ts";
 const HeaderContainer = styled.header`
     width: 100%;
     height: 64px;
+    padding: 0 10px;
     background-color: ${props => props.theme.color.background.paper};
     border-bottom: 1px solid ${props => props.theme.color.divider};
 `;
