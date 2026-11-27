@@ -76,15 +76,18 @@ function SignUpPage() {
     const onSubmit = async (input: CreateUserInputType) => {
         // 입력된 정보(input)을 가지고 백엔드에거 요청
         // 앞으로 fetch를 사용하지 않을것임. axios 패키지를 이용할 것임
+        // fetch는 백엔드가 400대나 500데로 오류임을 표시해도,
+        // "성공"으로 생각함 -> 어쨌든 응답을 받았기 때문에
         try {
             // 전송에 대한 내용을 기재하면 되는데, 그대로 데이터를 전달할 것인가?
             // 프론트엔드에서'만' 필요한 confirmPassword 항목이 있으니, 이것을 제외하고 전송
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { confirmPassword, ...submitData } = input;
 
             // 사용자가 적은 내용을 함께 fetch를 통해 보내줘야 함 => 사용자가 적은 내용은 HTTP 메세지 중 body
             // fetch(주소, 옵션) => 주소는 필수값, 옵션은 선택값
             // 옵션 자리에는 객채 { method, headers, body }
-            const respsone = await fetch("http://localhost:8000/user/create", {
+            const response = await fetch("http://localhost:8000/user/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,12 +96,32 @@ function SignUpPage() {
             });
 
             // 백엔드에서 보낸준 응답(string)을 JSON으로 파싱함
-            const result = await respsone.json();
+            const result = await response.json();
 
-            alert("회원가입이 완료 되었습니다. 로그인을 진행해주세요")
-            navigate("/auth/signin")
-
+            if (!result.ok) {
+                // 에러를 일으켜서 catch절을 실행시키는 명령
+                throw new Error(result.message || "회원가입 중 오류가 발생했습니다.");
+            }
+            alert("회원가입이 완료 되었습니다. 로그인을 진행해주세요");
+            navigate("/auth/signin");
         } catch(error) {
+            if (error instanceof Error) {
+                const errorMessage = error.message;
+
+                if (errorMessage === "이미 사용 중인 아이디입니다.") {
+                    setError("username", {message:errorMessage});
+                    return;
+                } else if (errorMessage === "이미 사용 중인 이메일입니다.") {
+                    setError("email", {message:errorMessage});
+                    return;
+                } else if (errorMessage === "이미 사용 중인 닉네임입니다.") {
+                    setError("nickname", {message:errorMessage});
+                    return;
+                } else {
+                    setError("root", { message: errorMessage });
+                    return;
+                }
+            }
             setError("root",{message: "회원가입이 실패했습니다. 다시 시도해주세요."})
         }
     };
